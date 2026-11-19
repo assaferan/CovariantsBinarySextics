@@ -7,9 +7,30 @@
 #include "fmpz_vec.h"
 #include "fmpz_mpoly.h"
 #include "arb_mat.h"
+#include "fmpz_mat.h"
 #include "acb_poly.h"
 #include "acb_mat.h"
 #include "acb_theta.h"
+
+/* Released FLINT (checked with 3.6) has no acb_theta_g2_covariants_lead and no ACB_THETA_G2_COV_NB;
+   acb_theta_g2_covariants(..., lead = 1, ...) returns the leading coefficients as constant polynomials. */
+#ifndef ACB_THETA_G2_COV_NB
+#define ACB_THETA_G2_COV_NB 26
+static void
+acb_theta_g2_covariants_lead(acb_ptr res, const acb_poly_t f, slong prec)
+{
+    acb_poly_struct cov[ACB_THETA_G2_COV_NB];
+    slong i;
+    for (i = 0; i < ACB_THETA_G2_COV_NB; i++)
+        acb_poly_init(cov + i);
+    acb_theta_g2_covariants(cov, f, 1, prec);
+    for (i = 0; i < ACB_THETA_G2_COV_NB; i++)
+    {
+        acb_poly_get_coeff_acb(res + i, cov + i, 0);
+        acb_poly_clear(cov + i);
+    }
+}
+#endif
 
 /* ---------- Weights and cosets ---------- */
 

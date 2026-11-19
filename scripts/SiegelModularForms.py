@@ -526,7 +526,11 @@ class SMF(SageObject):
         if use_ring:
             for j in range(SMF.jmax + 2, self.j + 2, 2):
                 SMF._AllGeneratorsAndRelations(j)
-        return self._AddGeneratorsAndRelations()
+        res = self._AddGeneratorsAndRelations()
+        # the covariants of the basis, for HeckeDecomposition; hecke_matrices.exe needs
+        # integral coefficients
+        self.basis = [c * c.denominator() for c in res[1]]
+        return res
 
     def ReadGenerators(prefix = "SMF_"):
         names = []
@@ -598,7 +602,8 @@ class SMF(SageObject):
         with open(filename, mode) as f:
             if mode == "a":
                 f.write("\n\n")
-            B = self.GetBasis()
+            self.GetBasis()
+            B = self.basis
             f.write(s)
             f.write(str(i) + "\n")
             for k in range(d):

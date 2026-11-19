@@ -51,7 +51,7 @@ def EvaluateBasicCovariants(sextic, leading_coefficient = True):
     R = sextic.base_ring()
     Rx = PolynomialRing(R, "x")
     C = {}
-    f = AlgebraicForm(2, 6, sextic)
+    f = AlgebraicForm(2, 6, sextic, *sextic.parent().gens()[:2])
     cofactors = {(1,6): 1, (2,0): 60, (2,4): 75, (2,8): 90, (3,2): 2250,
                  (3,6): 2250, (3,8): 450, (3,12): 540, (4,0): 11250, (4,4): 67500,
                  (4,6): 13500, (4,10): 13500, (5,2): 168750, (5,4): 67500,

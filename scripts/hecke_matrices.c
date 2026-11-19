@@ -12,6 +12,7 @@ action (T(p) if q=p is prime, T_1(p^2) if q=p^2) on the input space as a matrix
 with rational coefficients. If a given matrix is proved to be integral by other
 means, then the result is integral and certified. */
 
+#include <gmp.h>    /* before the flint headers, for their mpz functions */
 #include "fmpq.h"
 #include "fmpq_mat.h"
 #include "hecke.c"
@@ -234,7 +235,7 @@ int fmpq_mat_fprint_pretty(FILE * file, const fmpq_mat_t mat)
         xxx_putc('[');
         for (j = 0; j < c; j++)
         {
-            xxx_fmpq_print(mat->rows[i] + j);
+            xxx_fmpq_print(fmpq_mat_entry(mat, i, j));
             if (j != c - 1)
                 xxx_putc(' ');
         }
